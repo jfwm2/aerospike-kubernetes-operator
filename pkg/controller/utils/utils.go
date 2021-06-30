@@ -58,10 +58,11 @@ const (
 )
 
 const (
-	AerospikeServerContainerName     string = "aerospike-server"
-	AerospikeServerInitContainerName string = "aerospike-init"
-	AerospikeServerInitContainerImageEnvVar string = "AEROSPIKE_KUBERNETES_INIT_IMAGE"
-	AerospikeServerInitContainerDefaultImage string = "aerospike/aerospike-kubernetes-init:0.0.12"
+	AerospikeServerContainerName               string = "aerospike-server"
+	AerospikeServerInitContainerName           string = "aerospike-init"
+	AerospikeServerInitContainerImageEnvVar    string = "AEROSPIKE_KUBERNETES_INIT_IMAGE"
+	AerospikeServerInitContainerDefaultImage   string = "aerospike/aerospike-kubernetes-init:0.0.12"
+	AerospikeServerTlsEnabledOnlyOnRacksEnvVar string = "AEROSPIKE_KUBERNETES_TLS_ENABLED_ONLY_ON_RACKS"
 )
 
 // ClusterNamespacedName return namespaced name

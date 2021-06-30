@@ -388,7 +388,7 @@ servicePort = os.environ['MAPPED_PORT']
 
 if 'MY_POD_TLS_ENABLED' in os.environ and "true" == os.environ['MY_POD_TLS_ENABLED']:
   podPort = os.environ['POD_TLSPORT']
-  servicePort = os.environ['MAPPED_TLSPORT']
+  servicePort = os.environ['MAPPED_TLSPORT'] if os.environ['MAPPED_TLSPORT'] else os.environ['MAPPED_PORT']
 
 # Get AerospikeConfingHash and NetworkPolicyHash
 confHashFile = '/configs/aerospikeConfHash'

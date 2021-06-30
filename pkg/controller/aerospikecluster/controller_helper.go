@@ -91,7 +91,7 @@ func (r *ReconcileAerospikeCluster) createStatefulSet(aeroCluster *aerospikev1al
 		newEnvVarStatic("MY_POD_CLUSTER_NAME", aeroCluster.Name),
 	}
 
-	if name := getServiceTLSName(aeroCluster); name != "" {
+	if name := getServiceTLSName(aeroCluster); name != "" || IsTlsEnabledOnRacks() {
 		envVarList = append(envVarList, newEnvVarStatic("MY_POD_TLS_ENABLED", "true"))
 	}
 
@@ -1416,4 +1416,14 @@ func GetAerospikeServerInitContainerImage(aeroCluster *aerospikev1alpha1.Aerospi
 	logger.Info(fmt.Sprintf("%s set, using %s for init container image",
 		utils.AerospikeServerInitContainerImageEnvVar, image))
 	return image
+}
+
+func IsTlsEnabledOnRacks() bool {
+	val, found := os.LookupEnv(utils.AerospikeServerTlsEnabledOnlyOnRacksEnvVar)
+	if found {
+		pkglog.Debug(fmt.Sprintf("%s set to %s", utils.AerospikeServerTlsEnabledOnlyOnRacksEnvVar, val))
+		return val == "True"
+	}
+	pkglog.Debug(fmt.Sprintf("%s not set", utils.AerospikeServerTlsEnabledOnlyOnRacksEnvVar))
+	return false
 }
