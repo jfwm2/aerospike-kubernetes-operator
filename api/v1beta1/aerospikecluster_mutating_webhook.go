@@ -19,6 +19,7 @@ package v1beta1
 import (
 	"fmt"
 	"reflect"
+	"regexp"
 	"strings"
 
 	"github.com/go-logr/logr"
@@ -771,11 +772,19 @@ func escapeValue(valueGeneric interface{}) interface{} {
 	}
 }
 
-func escapeString(str string) string {
-	str = strings.ReplaceAll(str, "${un}", "\\${un}")
-	str = strings.ReplaceAll(str, "${dn}", "\\${dn}")
+var unOrDnQueryRegex = regexp.MustCompile(`.?\$\{[ud]n\}`)
 
-	return str
+func escapeString(str string) string {
+	return unOrDnQueryRegex.ReplaceAllStringFunc(str, func(m string) string {
+		if strings.HasPrefix(m, `\`) {
+			// already escaped
+			return m
+		} else if strings.HasPrefix(m, `${`) {
+			return `\` + m
+		} else {
+			return m[0:1] + `\` + m[1:]
+		}
+	})
 }
 
 func setNamespaceDefault(networks []string, namespace string) {

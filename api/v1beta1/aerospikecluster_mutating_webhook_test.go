@@ -23,6 +23,8 @@ func TestLdapQueryEscaping(t *testing.T) {
 	}
 
 	escapeLDAPConfiguration(config)
+	escapeLDAPConfiguration(config) // to test recursivity
+
 	if _, ok := config.Value["security"]; ok {
 		securityConf := config.Value["security"].(map[string]interface{})
 		if _, ok := securityConf["ldap"]; ok {
